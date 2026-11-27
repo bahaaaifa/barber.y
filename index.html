@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>صالون حلاقة - حجز موعد</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#F4EEE1;
+    --card:#FFFCF5;
+    --navy:#1C2B46;
+    --navy-soft:#3B4A68;
+    --red:#9E2B25;
+    --red-deep:#7C1F1B;
+    --line:#D8CDB2;
+    --mute:#6E6555;
+    color-scheme: light;
+  }
+  :root[data-theme="dark"]{
+    --ivory:#15130F;
+    --card:#1E1B15;
+    --navy:#F0E9D8;
+    --navy-soft:#C9BFA8;
+    --line:#352F22;
+    --mute:#9A8F75;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ivory:#15130F;
+      --card:#1E1B15;
+      --navy:#F0E9D8;
+      --navy-soft:#C9BFA8;
+      --line:#352F22;
+      --mute:#9A8F75;
+    }
+  }
+  *{box-sizing:border-box;}
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  body{
+    margin:0;background:var(--ivory);color:var(--navy);
+    font-family:'Tajawal',system-ui,sans-serif;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:calc(92px + env(safe-area-inset-bottom,0px));
+    max-width:100%;overflow-x:hidden;
+  }
+  header{padding:36px 20px 20px;text-align:center;}
+  .badge{
+    width:92px;height:92px;margin:0 auto 14px;border-radius:50%;
+    border:3px solid var(--navy);display:flex;align-items:center;justify-content:center;
+    position:relative;
+  }
+  .badge::before{
+    content:"";position:absolute;inset:6px;border:1px solid var(--red);border-radius:50%;
+  }
+  .badge span{font-size:1.9rem;}
+  .shop-name{
+    font-family:'El Messiri',serif;font-weight:700;font-size:2.1rem;margin:0;color:var(--navy);
+  }
+  .shop-tag{
+    color:var(--mute);font-size:0.85rem;letter-spacing:1px;margin-top:6px;
+  }
+  .ornament{display:flex;align-items:center;gap:10px;justify-content:center;margin:18px auto 0;width:220px;}
+  .ornament div{flex:1;height:1px;background:var(--line);}
+  .ornament span{color:var(--red);font-size:0.8rem;}
+  main{padding:18px 20px;}
+  .section-title{
+    font-family:'El Messiri',serif;font-weight:700;font-size:1.3rem;
+    text-align:center;margin:30px 0 16px;color:var(--navy);
+  }
+  .services{display:flex;flex-direction:column;gap:10px;}
+  .svc{
+    display:flex;justify-content:space-between;align-items:center;gap:12px;
+    background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:14px 16px;cursor:pointer;
+  }
+  .svc.active{border-color:var(--red);}
+  .svc-name{font-weight:700;font-size:0.98rem;color:var(--navy);}
+  .svc-dur{color:var(--mute);font-size:0.78rem;margin-top:2px;}
+  .svc-price{
+    font-weight:700;color:var(--red-deep);white-space:nowrap;font-size:0.9rem;
+  }
+  .dot{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--navy-soft);flex-shrink:0;}
+  .svc.active .dot{background:var(--red);border-color:var(--red);}
+  form{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:16px;margin-top:4px;
+  }
+  label{display:block;font-size:0.78rem;color:var(--mute);margin:10px 0 4px;}
+  input,select{
+    width:100%;padding:11px 12px;border-radius:9px;border:1px solid var(--line);
+    background:var(--ivory);color:var(--navy);font-family:inherit;font-size:0.95rem;
+  }
+  .status-msg{
+    margin-top:14px;padding:11px 14px;border-radius:9px;font-size:0.85rem;display:none;
+  }
+  .status-msg.ok{display:block;background:#E4EFE1;color:#2B5B2C;}
+  .status-msg.err{display:block;background:#F7E3E1;color:var(--red-deep);}
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .status-msg.ok{background:#1E3320;color:#A9D8A8;} :root:not([data-theme="light"]) .status-msg.err{background:#3A1F1D;color:#E7A8A3;} }
+  .bar{
+    position:fixed;bottom:0;right:0;left:0;
+    padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px));
+    background:var(--card);border-top:1px solid var(--line);
+  }
+  .book-btn{
+    width:100%;background:var(--red);color:#FFF7EC;border:none;border-radius:10px;
+    padding:14px;font-weight:700;font-size:1rem;font-family:inherit;cursor:pointer;
+  }
+  .book-btn:disabled{opacity:0.5;}
+  footer{text-align:center;color:var(--mute);font-size:0.72rem;padding:16px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge"><span>✂️</span></div>
+  <p class="shop-name" id="shopName">صالون الاسم</p>
+  <p class="shop-tag" id="shopTag">حلاقة رجالية منذ الأصالة</p>
+  <div class="ornament"><div></div><span>◆</span><div></div></div>
+</header>
+
+<main>
+  <p class="section-title">اختر خدمتك</p>
+  <div class="services" id="serviceList"></div>
+
+  <p class="section-title">موعدك</p>
+  <form onsubmit="return false;">
+    <label>التاريخ</label>
+    <input type="date" id="bookDate" required>
+    <label>الوقت</label>
+    <select id="bookTime" required></select>
+    <label>الاسم</label>
+    <input type="text" id="custName" placeholder="اسمك" required>
+    <label>رقم الهاتف</label>
+    <input type="tel" id="custPhone" placeholder="12345678" required>
+    <div class="status-msg" id="statusMsg"></div>
+  </form>
+</main>
+
+<div class="bar">
+  <button class="book-btn" id="bookBtn" onclick="checkAndBook()">تحقق واحجز الآن</button>
+</div>
+
+<footer>حرفية أصيلة منذ البداية ✂️</footer>
+
+<script>
+const CONFIG = {
+  shopName: "صالون الاسم",
+  shopTag: "حلاقة رجالية منذ الأصالة",
+  whatsappNumber: "21622175366",
+  webhookUrl: "https://hook.eu1.make.com/yhcuc5u75luw3fokpyp4s8fp5i5gc27c",
+  services: [
+    { name: "قص شعر", duration: "٢٥ د", price: 15 },
+    { name: "تهذيب لحية", duration: "١٥ د", price: 10 },
+    { name: "باقة كاملة (شعر + لحية)", duration: "٤٠ د", price: 22 },
+    { name: "حلاقة أطفال", duration: "٢٠ د", price: 12 },
+    { name: "تصفيف + تدليك فروة الرأس", duration: "١٥ د", price: 8 }
+  ],
+  timeSlots: ["09:00","09:45","10:30","11:15","12:00","12:45","13:30","14:15",
+              "15:00","15:45","16:30","17:15","18:00","18:45","19:30","20:15","21:00"]
+};
+
+document.getElementById('shopName').textContent = CONFIG.shopName;
+document.getElementById('shopTag').textContent = CONFIG.shopTag;
+
+const selected = new Set();
+const listEl = document.getElementById('serviceList');
+CONFIG.services.forEach((s,i)=>{
+  const row = document.createElement('div');
+  row.className = 'svc';
+  row.id = 'svc-'+i;
+  row.onclick = ()=>{ selected.has(i) ? selected.delete(i) : selected.add(i); row.classList.toggle('active'); };
+  row.innerHTML = `
+    <div class="dot"></div>
+    <div style="flex:1">
+      <div class="svc-name">${s.name}</div>
+      <div class="svc-dur">${s.duration}</div>
+    </div>
+    <div class="svc-price">${s.price} د.ت</div>`;
+  listEl.appendChild(row);
+});
+
+const timeSelect = document.getElementById('bookTime');
+CONFIG.timeSlots.forEach(t=>{
+  const opt = document.createElement('option');
+  opt.value = t; opt.textContent = t;
+  timeSelect.appendChild(opt);
+});
+
+const dateInput = document.getElementById('bookDate');
+const today = new Date();
+dateInput.min = today.toISOString().split('T')[0];
+
+function showStatus(type, msg){
+  const el = document.getElementById('statusMsg');
+  el.className = 'status-msg ' + type;
+  el.textContent = msg;
+}
+
+async function checkAndBook(){
+  const date = dateInput.value;
+  const time = timeSelect.value;
+  const name = document.getElementById('custName').value.trim();
+  const phone = document.getElementById('custPhone').value.trim();
+
+  if(!date || !name || !phone){
+    showStatus('err', 'الرجاء تعبئة التاريخ والاسم ورقم الهاتف');
+    return;
+  }
+  if(selected.size === 0){
+    showStatus('err', 'الرجاء اختيار خدمة واحدة على الأقل');
+    return;
+  }
+
+  const btn = document.getElementById('bookBtn');
+  btn.disabled = true;
+  btn.textContent = 'جارٍ التحقق من الموعد...';
+
+  try{
+    const res = await fetch(CONFIG.webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ date, time, name, phone })
+    });
+    const data = await res.json();
+
+    if(data.status === 'available'){
+      showStatus('ok', data.message || 'تم تأكيد حجزك بنجاح');
+      let lines = [`*حجز جديد - ${CONFIG.shopName}*`, ''];
+      let total = 0;
+      selected.forEach(i=>{
+        const s = CONFIG.services[i];
+        lines.push(`- ${s.name} — ${s.price} د.ت`);
+        total += s.price;
+      });
+      lines.push('', `*الإجمالي: ${total.toFixed(2)} د.ت*`, '');
+      lines.push(`الاسم: ${name}`, `الهاتف: ${phone}`, `التاريخ: ${date}`, `الوقت: ${time}`);
+      const msg = encodeURIComponent(lines.join('\n'));
+      window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${msg}`, '_blank');
+    } else {
+      showStatus('err', data.message || 'هذا الموعد محجوز، الرجاء اختيار وقت آخر');
+    }
+  } catch(e){
+    showStatus('err', 'تعذر التحقق من الموعد، حاول مرة أخرى');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'تحقق واحجز الآن';
+  }
+}
+</script>
+</body>
+</html>
